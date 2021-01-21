@@ -1,0 +1,33 @@
+{
+  "name": "basilytics",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently --kill-others -n mongodb,webapp,client -c green.bold,magenta.bold,cyan.bold \"docker-compose up\" \"yarn:next-dev\" \"yarn:watch-client-script\"",
+    "next-dev": "next dev",
+    "prebuild": "yarn minify-client-script",
+    "build": "next build",
+    "start": "next start",
+    "minify-client-script": "terser src/client-script.js --compress --mangle --toplevel --output public/script.js",
+    "watch-client-script": "nodemon --watch src/client-script.js --exec \"yarn minify-client-script\""
+  },
+  "dependencies": {
+    "maxmind": "^4.3.1",
+    "mongoose": "^5.11.12",
+    "next": "10.0.5",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "ua-parser-js": "^0.7.23",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.0",
+    "@types/ua-parser-js": "^0.7.35",
+    "@types/uuid": "^8.3.0",
+    "concurrently": "^5.3.0",
+    "nodemon": "^2.0.7",
+    "prettier": "^2.2.1",
+    "terser": "^5.5.1",
+    "typescript": "^4.1.3"
+  }
+}
