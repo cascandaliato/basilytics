@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-export const connection = mongoose.connect(
+export const dbConnection = mongoose.connect(
   process.env.MONGODB_CONNECTION_STRING,
   {
     useCreateIndex: true,
