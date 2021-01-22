@@ -1,6 +1,6 @@
 import crypto from 'crypto'
 import { dbConnection } from '../persistence/db-connection'
-import { Salt } from '../persistence/Salt'
+import { SaltRepository } from '../persistence/Salt'
 import { promisify } from 'util'
 
 const scrypt = promisify<
@@ -20,7 +20,7 @@ export const hash = async (
 ): Promise<string[]> => {
   await dbConnection
 
-  const { salt } = await Salt.findOne().exec()
+  const { salt } = await SaltRepository.findOne()
 
   const keys = (
     await scrypt(

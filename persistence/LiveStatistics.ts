@@ -1,22 +1,14 @@
-import mongoose, { Document, Model, Schema } from 'mongoose'
+import mongoose, { Document, Schema } from 'mongoose'
+import { MongooseRepository } from './Repository'
 
-// export interface ILiveStatistics {
-//   page: string
-//   presenceSignature: string
-//   referrer?: string
-//   siteId: string
-// }
-
-// type ILiveStatisticsDocument = ILiveStatistics & Document
-
-interface ILiveStatisticsDocument extends Document<string> {
+type LiveStatistics = {
   page: string
   presenceSignature: string
   referrer?: string
   siteId: string
 }
 
-const LiveStatisticsSchema = new Schema<ILiveStatisticsDocument>(
+const LiveStatisticsSchema = new Schema<LiveStatistics & Document>(
   {
     page: { type: String, required: true },
     presenceSignature: { type: String, required: true },
@@ -36,6 +28,12 @@ LiveStatisticsSchema.index({ siteId: 1 })
 LiveStatisticsSchema.index({ presenceSignature: 1 }, { unique: true })
 LiveStatisticsSchema.index({ lastSeenAt: 1 }, { expires: '10 minutes' })
 
-export const LiveStatistics: Model<ILiveStatisticsDocument> =
-  mongoose.models.LiveStatistics ||
+const LiveStatisticsModel =
+  (process.env.NODE_ENV === 'development'
+    ? mongoose.models.LiveStatistics
+    : null) ||
   mongoose.model('LiveStatistics', LiveStatisticsSchema, 'live_statistics')
+
+export const LiveStatisticsRepository = new MongooseRepository<LiveStatistics>(
+  LiveStatisticsModel
+)

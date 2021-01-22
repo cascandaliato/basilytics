@@ -1,25 +1,9 @@
-import mongoose, { Document, Model, Schema } from 'mongoose'
+import mongoose, { Document, Schema } from 'mongoose'
+import { MongooseRepository } from './Repository'
 
 type VisitsCount = { views: number; uniques: number }
 
-// export interface IDailyStatistics {
-//   siteId: string
-//   date: Date
-//   site: VisitsCount
-//   bounces?: number
-//   duration?: { totalSec: number; sessions: number }
-//   hours: Map<string, VisitsCount>
-//   hostnames?: Map<string, VisitsCount>
-//   pages?: Map<string, VisitsCount>
-//   referrers?: Map<string, VisitsCount>
-//   browser?: Map<string, number>
-//   country?: Map<string, number>
-//   deviceType?: Map<string, number>
-// }
-
-// type IDailyStatisticsDocument = IDailyStatistics & Document
-
-interface IDailyStatisticsDocument extends Document<string> {
+type DailyStatistics = {
   siteId: string
   date: Date
   site: VisitsCount
@@ -34,7 +18,7 @@ interface IDailyStatisticsDocument extends Document<string> {
   deviceType?: Map<string, number>
 }
 
-const DailyStatisticsSchema = new Schema<IDailyStatisticsDocument>(
+const DailyStatisticsSchema = new Schema<DailyStatistics & Document>(
   {
     siteId: { type: String, required: true },
     date: { type: Date, required: true },
@@ -79,6 +63,12 @@ const DailyStatisticsSchema = new Schema<IDailyStatisticsDocument>(
 
 DailyStatisticsSchema.index({ siteId: 1, date: 1 }, { unique: true })
 
-export const DailyStatistics: Model<IDailyStatisticsDocument> =
-  mongoose.models.DailyStatistics ||
+const DailyStatisticsModel =
+  (process.env.NODE_ENV === 'development'
+    ? mongoose.models.DailyStatistics
+    : null) ||
   mongoose.model('DailyStatistics', DailyStatisticsSchema, 'daily_statistics')
+
+export const DailyStatisticsRepository = new MongooseRepository<DailyStatistics>(
+  DailyStatisticsModel
+)

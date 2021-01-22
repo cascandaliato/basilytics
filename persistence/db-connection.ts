@@ -7,6 +7,5 @@ export const dbConnection = mongoose.connect(
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
-    // autoIndex: false,
   }
 )
