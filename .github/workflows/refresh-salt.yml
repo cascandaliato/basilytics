@@ -9,10 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Refresh hashing salt
-        run: 'curl
-          --header "Content-Type: application/json"
+        run: "curl
+          --silent
+          --verbose
+          --header \"Content-Type: application/json\"
           --request POST
-          --data ''{ "token": "${TOKEN}" }''
-          https://basilytics.vercel.app/api/refresh-salt'
+          --data \"{ \\\"token\\\": \\\"${TOKEN}\\\" }\"
+          https://basilytics.vercel.app/api/refresh-salt"
         env:
           TOKEN: ${{ secrets.REFRESH_SALT_TOKEN }}
