@@ -17,7 +17,7 @@
     "next": "10.0.5",
     "react": "17.0.1",
     "react-dom": "17.0.1",
-    "ua-parser-js": "^0.7.23",
+    "ua-parser-js": "^0.7.24",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
